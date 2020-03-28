@@ -1,4 +1,4 @@
-# cli.py
+# entry point of CLI
 import click
 
 
