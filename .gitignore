@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/python,venv
-# Edit at https://www.gitignore.io/?templates=python,venv
+# Created by https://www.gitignore.io/api/vim,venv,python
+# Edit at https://www.gitignore.io/?templates=vim,venv,python
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -120,4 +120,30 @@ env.bak/
 venv.bak/
 pip-selfcheck.json
 
-# End of https://www.gitignore.io/api/python,venv
+### Vim ###
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+Sessionx.vim
+
+# Temporary
+.netrwhist
+*~
+
+# Auto-generated tag files
+tags
+
+# Persistent undo
+[._]*.un~
+
+# Coc configuration directory
+.vim
+
+# End of https://www.gitignore.io/api/vim,venv,python
+
