@@ -1,15 +1,58 @@
+# cli.py
 import click
+# @click.command()
+# @click.argument('name')
+# @click.option('--greeting', '-g')
+# def main(name, greeting):
+#     click.echo("{}, {}".format(greeting, name))
+# if __name__ == "__main__":
+#     main()
 
 
-@click.command()
-@click.option('--count', default=1, help='Number of greetings.')
-@click.option('--name', prompt='Your name',
-              help='The person to greet.')
-def hello(count, name):
-    """Simple program that greets NAME for a total of COUNT times."""
-    for x in range(count):
-        click.echo('Hello %s!' % name)
+@click.group()
+def main():
+    """
+    A command line tool for keeping an eye on designated web pages
+    """
+    pass
 
 
-if __name__ == '__main__':
-    hello()
+@main.command()
+@click.argument('add', default='')
+def add(add):
+    """
+    Wizard for adding webpages to the list to watch
+    """
+    click.echo("Add")
+    pass
+
+
+@main.command()
+@click.argument('check', default='')
+def check(check):
+    """
+    Run through and check all of the webpages, printing out any with changes.
+    """
+    pass
+
+
+@main.command()
+@click.argument('update', default='')
+def update(update):
+    """
+    Updated designated URL
+    """
+    pass
+
+
+@main.command()
+@click.argument('delete', default='')
+def delete(delete):
+    """
+    Delete designated URL
+    """
+    pass
+
+
+if __name__ == "__main__":
+    main()
