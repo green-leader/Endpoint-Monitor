@@ -1,5 +1,6 @@
 # entry point of CLI
 import click
+import base64
 
 
 @click.group()
@@ -16,7 +17,9 @@ def add(add):
     """
     Wizard for adding webpages to the list to watch
     """
-    click.echo("Add")
+    URL = click.prompt('Please enter URL', type=str).encode('ascii')
+    pageEntry = [base64.b64encode(URL), '']
+    click.echo(pageEntry)
     pass
 
 
