@@ -50,8 +50,8 @@ def update(update):
 
 
 @main.command()
-@click.argument('delete')
-def delete(delete, default=''):
+@click.argument('delete', default='')
+def delete(delete):
     """
     Delete designated URL
     """
