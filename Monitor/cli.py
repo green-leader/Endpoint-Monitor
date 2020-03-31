@@ -55,6 +55,16 @@ def delete(delete):
     """
     Delete designated URL
     """
+    if delete == '':
+        click.echo(
+          "after delete keyword you need to entry the URL to delete", err=True)
+    b64 = base64.b64encode(delete.encode('ascii'))
+    try:
+        core.delete(b64.decode())
+    except Exception as err:
+        click.echo(
+          "There was an issue performing the deletion: %s" % repr(err),
+          err=True)
     pass
 
 

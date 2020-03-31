@@ -1,6 +1,11 @@
 # Monitor Core
 import shelve
-import sys
+import dbm
+
+
+class NoDB(Exception):
+    pass
+
 
 shelfFile = 'pageListing.dat'
 
@@ -17,9 +22,13 @@ def listing():
         return dict(shelf)
 
 
+def delete(delURL):
+    with shelve.open(shelfFile, 'w') as shelf:
+        try:
+            del shelf[delURL]
+        except dbm.error:
+            raise NoDB('There is not a database to delete from')
+
+
 def update():
-    pass
-
-
-def delete():
     pass
