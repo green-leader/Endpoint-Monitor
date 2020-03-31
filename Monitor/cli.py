@@ -1,7 +1,7 @@
 # entry point of CLI
 import click
 import base64
-import core
+from Monitor import core
 
 
 @click.group()
