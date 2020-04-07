@@ -41,6 +41,16 @@ def list(check):
 
 
 @main.command()
+@click.argument('check', default='')
+def check(check):
+    """
+    Check all entries in data store for changes
+    """
+    raise NotImplementedError("Check has not been implemented")
+    pass
+
+
+@main.command()
 @click.argument('update', default='')
 def update(update):
     """
