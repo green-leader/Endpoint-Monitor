@@ -29,14 +29,24 @@ def add(add):
 
 
 @main.command()
-@click.argument('check', default='')
-def check(check):
+@click.argument('list', default='')
+def list(list):
     """
-    Run through and check all of the webpages, printing out any with changes.
+    List all of the entries in data store
     """
     listing = core.listing()
     for k in listing:
         click.echo("%s: %s" % (k, listing[k]))
+    pass
+
+
+@main.command()
+@click.argument('check', default='')
+def check(check):
+    """
+    Check all entries in data store for changes
+    """
+    raise NotImplementedError("Check has not been implemented")
     pass
 
 
@@ -46,6 +56,7 @@ def update(update):
     """
     Updated designated URL
     """
+    raise NotImplementedError("Update has not been implemented")
     pass
 
 
