@@ -29,10 +29,10 @@ def add(add):
 
 
 @main.command()
-@click.argument('check', default='')
-def check(check):
+@click.argument('list', default='')
+def list(check):
     """
-    Run through and check all of the webpages, printing out any with changes.
+    List all of the entries in data store
     """
     listing = core.listing()
     for k in listing:
