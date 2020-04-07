@@ -30,7 +30,7 @@ def add(add):
 
 @main.command()
 @click.argument('list', default='')
-def list(check):
+def list(list):
     """
     List all of the entries in data store
     """
@@ -56,6 +56,7 @@ def update(update):
     """
     Updated designated URL
     """
+    raise NotImplementedError("Update has not been implemented")
     pass
 
 
