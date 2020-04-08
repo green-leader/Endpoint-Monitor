@@ -18,8 +18,11 @@ def add(data):
 
 def listing():
     '''Get all data in data store as dictionary'''
-    with shelve.open(shelfFile, 'r') as shelf:
-        return dict(shelf)
+    try:
+        with shelve.open(shelfFile, 'r') as shelf:
+            return dict(shelf)
+    except dbm.error:
+        return dict()
 
 
 def delete(delURL):

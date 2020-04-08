@@ -1,7 +1,7 @@
 # entry point of CLI
 import click
 import base64
-import core
+from Monitor import core
 
 
 @click.group()
@@ -33,8 +33,8 @@ def add(add):
 
 
 @main.command()
-@click.argument('list', default='')
-def list(list):
+@click.argument('listing', default='')
+def listing(listing):
     """
     List all of the entries in data store
     """
