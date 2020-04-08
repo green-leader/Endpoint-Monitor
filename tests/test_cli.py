@@ -1,7 +1,7 @@
 import unittest
 from click.testing import CliRunner
-from Monitor import cli
-from Monitor import core
+from monitor import cli
+from monitor import core
 
 import tempfile
 import os
