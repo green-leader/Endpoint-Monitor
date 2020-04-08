@@ -1,5 +1,5 @@
 import unittest
-from Monitor import core
+from monitor import core
 
 import os
 import tempfile
