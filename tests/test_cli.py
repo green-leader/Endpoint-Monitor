@@ -1,5 +1,6 @@
 import unittest
 from click.testing import CliRunner
+
 from monitor import cli
 from monitor import core
 
@@ -30,8 +31,20 @@ class CliTest(unittest.TestCase):
     def testAdd(self):
         runner = CliRunner()
         result = runner.invoke(cli.add, input='https://google.com\nTestInput')
-        print(result.output)
         self.assertEqual(0, result.exit_code)
+
+    def testDelete(self):
+        runner = CliRunner()
+        runner.invoke(cli.add, input='https://google.com\nTestInput')
+        result = runner.invoke(cli.delete, ['aHR0cHM6Ly9nb29nbGUuY29t'])
+        self.assertEqual(0, result.exit_code)
+
+    def testBadDelete(self):
+        runner = CliRunner()
+        runner.invoke(cli.add, input='https://google.com\nTestInput')
+        result = runner.invoke(cli.delete, ['BadDelete'])
+        assert 'That doesnt appear to be a valid entry\n' == result.output
+        self.assertEqual(1, result.exit_code)
 
 
 if __name__ == '__main__':

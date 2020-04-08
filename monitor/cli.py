@@ -1,6 +1,7 @@
 # entry point of CLI
 import click
 import base64
+import sys
 from monitor import core
 
 
@@ -29,6 +30,7 @@ def add(add):
         core.add(pageEntry)
     except Exception as err: # Exception here will catch anything signalling program errors # noqa e501
         click.echo("Unknown error adding page to data store: '%s'" % err, err=True) # noqa e501
+        sys.exit(1)
     pass
 
 
@@ -73,13 +75,19 @@ def delete(delete):
     if delete == '':
         click.echo(
           "after delete keyword you need to entry the URL to delete", err=True)
-    b64 = base64.b64encode(delete.encode('ascii'))
+        pass
     try:
-        core.delete(b64.decode())
+        core.delete(delete)
+    except KeyError as err:
+        click.echo(
+          'That doesnt appear to be a valid entry',
+          err=True)
+        sys.exit(1)
     except Exception as err:
         click.echo(
           "There was an issue performing the deletion: %s" % repr(err),
           err=True)
+        sys.exit(1)
     pass
 
 
