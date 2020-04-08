@@ -18,9 +18,13 @@ def add(add):
     """
     Wizard for adding webpages to the list to watch
     """
+    pageEntry = dict()
     URL = base64.b64encode(
           click.prompt('Please enter URL', type=str).encode('ascii'))
-    pageEntry = [URL.decode('ascii'), '']
+    pageEntry['URL'] = URL.decode()
+    pageEntry['name'] = click.prompt(
+        'Enter a name for this entry for user purposes', type=str)
+    print(pageEntry)
     try:
         core.add(pageEntry)
     except Exception as err: # Exception here will catch anything signalling program errors # noqa e501

@@ -13,7 +13,7 @@ shelfFile = 'pageListing.dat'
 def add(data):
     '''Add data to data store'''
     with shelve.open(shelfFile, 'c') as shelf:
-        shelf[data[0]] = data
+        shelf[data['URL']] = data
 
 
 def listing():
