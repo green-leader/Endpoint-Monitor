@@ -18,7 +18,8 @@ shelfFile = 'pageListing.dat'
 
 
 def add(data):
-    '''Add data to data store'''
+    '''Fetch has, then add data to data store'''
+    data['hash'] = fetch(data['URL'])
     with shelve.open(shelfFile, 'c') as shelf:
         shelf[data['URL']] = data
 
@@ -53,4 +54,3 @@ def fetch(URL):
     response = hashlib.sha1()
     response.update(page.content)
     return response.hexdigest()
-    pass
