@@ -1,9 +1,16 @@
 # Monitor Core
 import shelve
 import dbm
+import base64
+import requests
+import hashlib
 
 
 class NoDB(Exception):
+    pass
+
+
+class BadURL(Exception):
     pass
 
 
@@ -11,7 +18,8 @@ shelfFile = 'pageListing.dat'
 
 
 def add(data):
-    '''Add data to data store'''
+    '''Fetch has, then add data to data store'''
+    data['hash'] = fetch(data['URL'])
     with shelve.open(shelfFile, 'c') as shelf:
         shelf[data['URL']] = data
 
@@ -35,3 +43,14 @@ def delete(delURL):
 
 def update():
     pass
+
+
+def fetch(URL):
+    '''fetch base64 Encoded URL returning hexdigest of content'''
+    urlDecoded = base64.b64decode(URL)
+    if urlDecoded[0:4] != b'http':
+        raise BadURL('Invalid URL protocol')
+    page = requests.get(urlDecoded)
+    response = hashlib.sha1()
+    response.update(page.content)
+    return response.hexdigest()
