@@ -42,6 +42,15 @@ class CoreTest(unittest.TestCase):
         with self.assertRaises(dbm.error):
             core.delete(u1[0])
 
+    def testFetchBadProtocol(self):
+        '''Test fetch with unsupported protocol'''
+        with self.assertRaises(core.BadURL):
+            core.fetch(b'YmFkcHJvdG9jb2w=').decode()
+
+    def testFetch(self):
+        assert '4a3ce8ee11e091dd7923f4d8c6e5b5e41ec7c047' \
+          == core.fetch(b'aHR0cDovL2V4YW1wbGUuY29t')
+
 
 if __name__ == '__main__':
     unittest.main()
