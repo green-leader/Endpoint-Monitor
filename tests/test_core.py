@@ -1,5 +1,7 @@
 import unittest
+from unittest import mock
 from monitor import core
+import testutils as utils
 
 import os
 import tempfile
@@ -20,19 +22,21 @@ class CoreTest(unittest.TestCase):
             os.remove(self.tempShelf)
         pass
 
+    @mock.patch('requests.get', utils.get_fake_get(200, ''))
     def testAdd(self):
         u1 = dict()
         u1['Name'] = 'Google Homepage'
         u1['URL'] = 'aHR0cHM6Ly9nb29nbGUuY29t'
-        u1['hash'] = 'sha1:1234'
+        u1['hash'] = ''
         core.add(u1)
         assert 1 == len(core.listing())
 
+    @mock.patch('requests.get', utils.get_fake_get(200, ''))
     def testDeleteExisting(self):
         u1 = dict()
         u1['Name'] = 'Google Homepage'
         u1['URL'] = 'aHR0cHM6Ly9nb29nbGUuY29t'
-        u1['hash'] = 'sha1:1234'
+        u1['hash'] = ''
         core.add(u1)
         core.delete(u1['URL'])
         self.assertEqual(0, len(core.listing()))
@@ -47,9 +51,24 @@ class CoreTest(unittest.TestCase):
         with self.assertRaises(core.BadURL):
             core.fetch(b'YmFkcHJvdG9jb2w=').decode()
 
+    @mock.patch('requests.get', utils.get_fake_get(200, 'fake Request'))
     def testFetch(self):
-        assert '4a3ce8ee11e091dd7923f4d8c6e5b5e41ec7c047' \
-          == core.fetch(b'aHR0cDovL2V4YW1wbGUuY29t')
+        result = core.fetch(b'aHR0cDovL2Zha2VVUkw=')
+        assert '8503b8403995daa720ccfe74bb9c8b167513ea5f' == result
+
+    def get_fake_get_byte(status, content):
+        m = mock.Mock()
+        m.status_code = status
+        m.content = bytes(content.encode('utf-8'))
+
+        def fake_get(url):
+            return m
+        return fake_get
+
+    @mock.patch('requests.get', get_fake_get_byte(200, 'fake Request'))
+    def testFetchBytesData(self):
+        result = core.fetch(b'aHR0cDovL2Zha2VVUkw=')
+        assert '8503b8403995daa720ccfe74bb9c8b167513ea5f' == result
 
 
 if __name__ == '__main__':

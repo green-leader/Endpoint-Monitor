@@ -52,5 +52,10 @@ def fetch(URL):
         raise BadURL('Invalid URL protocol')
     page = requests.get(urlDecoded)
     response = hashlib.sha1()
+    try:
+        page.content = page.content.encode('utf-8')
+    except AttributeError:
+        pass
+
     response.update(page.content)
     return response.hexdigest()
