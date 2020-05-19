@@ -1,4 +1,7 @@
 test:
 	python3 -m pytest
 
-.PHONY: test
+coverage:
+	python3 -m pytest --cov=monitor tests
+
+.PHONY: test coverage
