@@ -51,7 +51,6 @@ def _updateEntry(data):
 
 def update(checkURL=''):
     '''check if item(s) have changed'''
-    print("Update Checking %s" % checkURL)
     updatedRecords = list()
     records = listing()
     if len(records) == 0:
@@ -75,11 +74,9 @@ def update(checkURL=''):
 def fetch(URL):
     '''fetch base64 Encoded URL returning hexdigest of content'''
     urlDecoded = base64.b64decode(URL)
-    print("Checking %s" % urlDecoded)
     if urlDecoded[0:4] != b'http':
         raise BadURL('Invalid URL protocol')
     page = requests.get(urlDecoded)
-    print("Got %s" % page.content)
     response = hashlib.sha1()
     try:
         page.content = page.content.encode('utf-8')

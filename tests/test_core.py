@@ -95,13 +95,11 @@ class CoreTest(unittest.TestCase):
         mocker.return_value.status_code = 200
         mocker.return_value.content = ''
         core.add(u1)
-        print(core.listing())
 
         mocker.return_value.content = '2'
         core.update(u1['URL'])
         records = core.listing()
         for record in records:
-            print(records[record])
             assert records[record]['hash'] != u1['hash']
 
 
