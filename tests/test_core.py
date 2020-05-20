@@ -67,8 +67,15 @@ class CoreTest(unittest.TestCase):
 
     @mock.patch('requests.get', get_fake_get_byte(200, 'fake Request'))
     def testFetchBytesData(self):
+        '''test for handling when handed bytes and not a string'''
         result = core.fetch(b'aHR0cDovL2Zha2VVUkw=')
         assert '8503b8403995daa720ccfe74bb9c8b167513ea5f' == result
+
+    def testCheckNoData(self):
+        with self.assertRaises(core.EmptyListError):
+            core.update()
+            core.update('')
+            core.update(None)
 
 
 if __name__ == '__main__':

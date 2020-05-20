@@ -14,6 +14,10 @@ class BadURL(Exception):
     pass
 
 
+class EmptyListError(Exception):
+    pass
+
+
 shelfFile = 'pageListing.dat'
 
 
@@ -41,7 +45,12 @@ def delete(delURL):
             raise NoDB('There is not a database to delete from')
 
 
-def update():
+def update(checkURL=''):
+    '''check if item(s) have changed'''
+    if checkURL == '' or checkURL is None:  # assume request for all
+        records = listing()
+        if len(records) == 0:
+            raise EmptyListError('There\'s nothing to check, database empty')
     pass
 
 
