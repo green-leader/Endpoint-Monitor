@@ -77,15 +77,6 @@ class CoreTest(unittest.TestCase):
             core.update('')
             core.update(None)
 
-    def get_fake_get(status, content):
-        m = mock.Mock()
-        m.status_code = status
-        m.content = content.encode('utf-8')
-
-        def fake_get(url):
-            return m
-        return fake_get
-
     @mock.patch('requests.get')
     def testUpdateSingleItem(self, mocker):
         u1 = dict()
@@ -101,6 +92,31 @@ class CoreTest(unittest.TestCase):
         records = core.listing()
         for record in records:
             assert records[record]['hash'] != u1['hash']
+
+    @mock.patch('requests.get')
+    def testUpdateTwoItems(self, mocker):
+        u1 = dict()
+        u1['Name'] = 'Homepage 1'
+        u1['URL'] = 'aHR0cDovL2hvbWVwYWdlMQ=='
+
+        mocker.return_value.status_code = 200
+        mocker.return_value.content = ''
+        core.add(u1)
+
+        u1['Name'] = 'Homepage 2'
+        u1['URL'] = 'aHR0cDovL2hvbWVwYWdlMg=='
+
+        mocker.return_value.status_code = 200
+        mocker.return_value.content = ''
+        core.add(u1)
+
+        oldRecords = core.listing()
+
+        mocker.return_value.content = '2'
+        core.update()
+        records = core.listing()
+        for record in records:
+            assert records[record]['hash'] != oldRecords[record]['hash']
 
 
 if __name__ == '__main__':
