@@ -77,6 +77,7 @@ def fetch(URL):
     if urlDecoded[0:4] != b'http':
         raise BadURL('Invalid URL protocol')
     page = requests.get(urlDecoded)
+    page.raise_for_status()
     response = hashlib.sha1()
     try:
         page.content = page.content.encode('utf-8')
