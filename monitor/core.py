@@ -14,14 +14,17 @@ class BadURL(Exception):
     pass
 
 
+class EmptyListError(Exception):
+    pass
+
+
 shelfFile = 'pageListing.dat'
 
 
 def add(data):
     '''Fetch has, then add data to data store'''
     data['hash'] = fetch(data['URL'])
-    with shelve.open(shelfFile, 'c') as shelf:
-        shelf[data['URL']] = data
+    _updateEntry(data)
 
 
 def listing():
@@ -41,8 +44,31 @@ def delete(delURL):
             raise NoDB('There is not a database to delete from')
 
 
-def update():
-    pass
+def _updateEntry(data):
+    with shelve.open(shelfFile, 'c') as shelf:
+        shelf[data['URL']] = data
+
+
+def update(checkURL=''):
+    '''check if item(s) have changed'''
+    updatedRecords = list()
+    records = listing()
+    if len(records) == 0:
+        raise EmptyListError('There\'s nothing to check, database empty')
+    if checkURL == '' or checkURL is None:  # assume request for all
+        for record in records:
+            response = fetch(record)
+            if records[record]['hash'] != response:
+                records[record]['hash'] = response
+                _updateEntry(records[record])
+                updatedRecords.append(record)
+    else:
+        response = fetch(checkURL)
+        if records[checkURL]['hash'] != response:
+            records[checkURL]['hash'] = response
+            _updateEntry(records[checkURL])
+            updatedRecords.append(checkURL)
+    return updatedRecords
 
 
 def fetch(URL):
@@ -51,6 +77,12 @@ def fetch(URL):
     if urlDecoded[0:4] != b'http':
         raise BadURL('Invalid URL protocol')
     page = requests.get(urlDecoded)
+    page.raise_for_status()
     response = hashlib.sha1()
+    try:
+        page.content = page.content.encode('utf-8')
+    except AttributeError:
+        pass
+
     response.update(page.content)
     return response.hexdigest()
