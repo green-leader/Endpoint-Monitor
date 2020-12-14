@@ -53,7 +53,11 @@ def check(check):
     """
     Check all entries in data store for changes
     """
-    updateResults = core.update(check)
+    try:
+        updateResults = core.update(check)
+    except core.EmptyListError as err:
+        click.echo("%s" % err, err=True)
+        return
     for entry in updateResults:
         click.echo("%s changed" % entry)
     pass
