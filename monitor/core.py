@@ -4,6 +4,7 @@ import dbm
 import base64
 import requests
 import hashlib
+import bs4
 
 
 class NoDB(Exception):
@@ -78,11 +79,13 @@ def fetch(URL):
         raise BadURL('Invalid URL protocol')
     page = requests.get(urlDecoded)
     page.raise_for_status()
-    response = hashlib.sha1()
-    try:
-        page.content = page.content.encode('utf-8')
-    except AttributeError:
-        pass
 
-    response.update(page.content)
+    response = hashlib.sha1()
+
+    soup = bs4.BeautifulSoup(page.content, 'html.parser')
+
+    for tag in soup(['script', 'style']):
+        tag.extract()
+
+    response.update(soup.encode('utf-8'))
     return response.hexdigest()
