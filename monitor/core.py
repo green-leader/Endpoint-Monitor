@@ -75,17 +75,37 @@ def update(checkURL=''):
 def fetch(URL):
     '''fetch base64 Encoded URL returning hexdigest of content'''
     urlDecoded = base64.b64decode(URL)
-    if urlDecoded[0:4] != b'http':
+    proto = urlDecoded[:urlDecoded.find(b'://')]
+    if proto in [b'http', b'https']:
+        result = fetch_http(URL)
+        response = hashlib.sha1()
+        response.update(result.encode('utf-8'))
+        return response.hexdigest()
+    elif proto in [b'file']:
+        result = fetch_file(URL)
+        return result
+    else:
         raise BadURL('Invalid URL protocol')
+
+
+def fetch_http(URL):
+    '''fetch URL using http request'''
+    urlDecoded = base64.b64decode(URL)
     page = requests.get(urlDecoded)
     page.raise_for_status()
 
-    response = hashlib.sha1()
-
     soup = bs4.BeautifulSoup(page.content, 'html.parser')
-
     for tag in soup(['script', 'style']):
         tag.extract()
 
-    response.update(soup.encode('utf-8'))
+    return soup
+
+
+def fetch_file(URL):
+    '''fetch URL as file'''
+    urlDecoded = base64.b64decode(URL)
+    with open(urlDecoded[urlDecoded.find(b'://')+3:], 'rb') as f:
+        response = hashlib.sha1()
+        while chunk := f.read(160):
+            response.update(chunk)
     return response.hexdigest()
