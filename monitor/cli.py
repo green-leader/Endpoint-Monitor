@@ -53,7 +53,9 @@ def check(check):
     """
     Check all entries in data store for changes
     """
-    raise NotImplementedError("Check has not been implemented")
+    updateResults = core.update(check)
+    for entry in updateResults:
+        click.echo("%s changed" % entry)
     pass
 
 
