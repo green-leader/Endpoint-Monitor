@@ -24,12 +24,13 @@ def add(add):
           click.prompt('Please enter URL', type=str).encode('ascii'))
     pageEntry['URL'] = URL.decode()
     pageEntry['name'] = click.prompt(
-        'Enter a name for this entry for user purposes', type=str)
-    print(pageEntry)
+        'Enter a name for this entry for user purposes', type=str, default='')
     try:
-        core.add(pageEntry)
+        result = core.add(pageEntry)
+    except core.BadURL as err:
+        click.echo("%s" % err)
     except Exception as err: # Exception here will catch anything signalling program errors # noqa e501
-        click.echo("Unknown error adding page to data store: '%s'" % err, err=True) # noqa e501
+        click.echo("Unknown error adding page to data store: '%s'" % err) # noqa e501
         sys.exit(1)
     pass
 
@@ -78,7 +79,7 @@ def delete(delete):
         pass
     try:
         core.delete(delete)
-    except KeyError as err:
+    except KeyError:
         click.echo(
           'That doesnt appear to be a valid entry',
           err=True)
