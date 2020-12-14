@@ -6,6 +6,7 @@ import testutils as utils
 import os
 import tempfile
 import dbm
+import base64
 
 
 class CoreTest(unittest.TestCase):
@@ -76,6 +77,30 @@ class CoreTest(unittest.TestCase):
             core.update()
             core.update('')
             core.update(None)
+
+    def testAddFileItem(self):
+        empty = tempfile.NamedTemporaryFile()
+        u1 = dict()
+        url = bytes('file://' + empty.name, 'utf-8')
+        u1['URL'] = base64.b64encode(url).decode()
+        u1['name'] = 'Empty File'
+        core.add(u1)
+        assert 1 == len(core.listing())
+        pass
+
+    def testChangeFileItem(self):
+        changeFile = tempfile.NamedTemporaryFile()
+        u1 = dict()
+        url = bytes('file://' + changeFile.name, 'utf-8')
+        u1['URL'] = base64.b64encode(url).decode()
+        u1['name'] = 'updated file'
+        core.add(u1)
+        changeFile.write(b'Hello World')
+        changeFile.seek(0)
+        old = core.listing()
+        core.update(base64.b64encode(url).decode())
+        new = core.listing()
+        assert old != new
 
     @mock.patch('requests.get')
     def testUpdateSingleItem(self, mocker):
