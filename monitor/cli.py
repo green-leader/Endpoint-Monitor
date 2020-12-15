@@ -29,6 +29,7 @@ def add(add):
         result = core.add(pageEntry)
     except core.BadURL as err:
         click.echo("%s" % err)
+        sys.exit(1)
     except Exception as err: # Exception here will catch anything signalling program errors # noqa e501
         click.echo("Unknown error adding page to data store: '%s'" % err) # noqa e501
         sys.exit(1)
@@ -57,7 +58,7 @@ def check(check):
         updateResults = core.update(check)
     except core.EmptyListError as err:
         click.echo("%s" % err, err=True)
-        return
+        sys.exit(1)
     for entry in updateResults:
         click.echo("%s changed" % entry)
     pass
